@@ -3,8 +3,11 @@
 #include "ofMain.h"
 #include "Boid.h"
 #include "Food.h"
+#include "Aggressor.h"
 
-#define BOIDCOUNT 250
+#define FOODCOUNT 250
+#define BOIDCOUNT 50
+#define AGGRESSORCOUNT 1
 
 class ofApp : public ofBaseApp {
 
@@ -27,4 +30,5 @@ public:
 
 	vector<Boid*> myBoids;
 	vector<Food*> myFoods;
+	vector<Aggressor*> myAggressors;
 };

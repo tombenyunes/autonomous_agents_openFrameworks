@@ -3,14 +3,42 @@
 Food::Food()
 {
 	pos.set(ofRandom(0, ofGetWidth()), ofRandom(0, ofGetHeight()));
+    speed = 0.075;
+    dir = { ofRandom(-0.075, 0.075), ofRandom(-0.075, 0.075) };
 	radius = 2.5;
 	color.set(255, 255, 0);
     stroke = 255;
+    isAlive = true;
+    absorbing = false;
+}
+
+Food::~Food()
+{
+
 }
 
 void Food::update()
 {
+    randomWalk();
     getColor();
+}
+
+void Food::randomWalk()
+{
+    int r = round(ofRandom(0, 100));
+
+    if (r < 2) {
+        dir = { ofRandom(-0.075, 0.075), ofRandom(-0.075, 0.075) };
+    }
+
+    if (!absorbing) {
+        dir.scale(0.075);
+    }
+    else {
+        dir.scale(5);
+    }
+
+    pos += dir;
 }
 
 void Food::getColor()

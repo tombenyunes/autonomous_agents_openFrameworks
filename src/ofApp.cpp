@@ -6,11 +6,19 @@ void ofApp::setup()
 	ofSetVerticalSync(1);
 	ofEnableAntiAliasing();
 
-	for (int i = 0; i < BOIDCOUNT; i++) {
+	for (int i = 0; i < FOODCOUNT; i++) {
 		Food* f = new Food{};
 		myFoods.push_back(f);
+	}
+
+	for (int i = 0; i < BOIDCOUNT; i++) {
 		Boid* b = new Boid{};
 		myBoids.push_back(b);
+	}
+
+	for (int i = 0; i < AGGRESSORCOUNT; i++) {
+		Aggressor* a = new Aggressor{};
+		myAggressors.push_back(a);
 	}
 }
 
@@ -19,21 +27,40 @@ void ofApp::update()
 {
 	ofBackground(0);
 
-	//if (ofGetFrameNum() % 2 == 0) {
-	for (int i = 0; i < BOIDCOUNT; i++) {
+	for (int i = 0; i < myFoods.size(); i++) {
 		myFoods[i]->update();
-		myBoids[i]->update(myBoids);
+
+		if (!myFoods[i]->isAlive) {
+			myFoods.erase(myFoods.begin() + i);
+			Food* f = new Food{};
+			myFoods.push_back(f);
+		}
 	}
-	//}
+	
+	for (int i = 0; i < myBoids.size(); i++) {
+		myBoids[i]->update(&myBoids, &myFoods);
+
+		if (!myBoids[i]->isAlive) {
+			myBoids.erase(myBoids.begin() + i);
+		}
+	}
+
+	for (int i = 0; i < myAggressors.size(); i++) {
+		myAggressors[i]->update(&myBoids, &myFoods);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
-	for (int i = 0; i < BOIDCOUNT; i++) {
+	for (int i = 0; i < myFoods.size(); i++) {
 		myFoods[i]->draw();
+	}
+	for (int i = 0; i < myBoids.size(); i++) {
 		myBoids[i]->draw();
+	}
+	for (int i = 0; i < myAggressors.size(); i++) {
+		myAggressors[i]->draw();
 	}
 }
 
